@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popcorn Online Sales</title>
+  <script>
+    function lookupZip() {
+      const zip = document.getElementById("zip").value;
+
+      if (zip.length === 5) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "lookup.php?zip=" + zip, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            if (response.city && response.state) {
+              document.getElementById("city").value = response.city;
+              document.getElementById("state").value = response.state;
+            } else {
+              alert("No data found for this ZIP code.");
+            }
+          }
+        };
+        xhr.send();
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("orderForm").reset();
+    }
+  </script>
+</head>
+<body>
+  <h2>Welcome to Popcorn online Sales</h2>
+  <form id="orderForm">
+    <label>Buyer's Name: <input type="text" name="buyerName"></label><br>
+    <label>Street Address: <input type="text" name="street"></label><br>
+    <label>Zip code: <input type="text" id="zip" name="zip" onkeyup="lookupZip()"></label><br>
+    <label>City: <input type="text" id="city" name="city"></label><br>
+    <label>State: <input type="text" id="state" name="state"></label><br><br>
+
+    <input type="submit" value="Submit Order">
+    <input type="button" value="Clear Order Form" onclick="clearForm()">
+  </form>
+</body>
+</html>
